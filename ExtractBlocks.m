@@ -1,6 +1,7 @@
 function [ output_args ] = ExtractBlocks( filename )
 %EXTRACTBLOCKS extracts the blocks from the images and returns patches in a
 % matrix. whose each row corresponds to a patch.
+%USAGE: ExtractBlocks('T1_01.TIFF')
  
   %%extract blocks and reshape them to flat out array
   extract = @(block_struct) reshape(block_struct.data,[1 100]);

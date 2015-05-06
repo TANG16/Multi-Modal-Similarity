@@ -3,7 +3,7 @@ function [] = CreateTIFF()
 %ability to set a few HEADERS in the TIFF images we generate but is is
 %currently disabled. The setting of he HEADERS would give us the ability to
 %control the number of STRIPS that our Block Extraction Algorithm reads at
-%a time.
+%a time. USAGE: CreateTIFF
 
 % ===== NOTE: PLease modify the directory of read images below, as per needs ======
 d=dir(fullfile(pwd,'Multi-Modal-Similarity/Dataset/*.nii'));
