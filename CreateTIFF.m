@@ -6,12 +6,14 @@ function [] = CreateTIFF()
 %a time. USAGE: CreateTIFF
 
 % ===== NOTE: PLease modify the directory of read images below, as per needs ======
-d=dir(fullfile(pwd,'Multi-Modal-Similarity/Dataset/*.nii'));
+d=dir(fullfile(pwd,'/Dataset/*.nii'));
 for k=1:length(d)
   fname=d(k).name;
-  Data = load_untouch_nii(fname);
+  path = strcat(pwd,'\Dataset\');
+  pathFile = strcat(path,fname);
+  Data = load_untouch_nii(pathFile);
   %imshow(double(Data.img)/255);
-  WriteFname = strcat('Multi-Modal-Similarity/Dataset/',fname(1:end-4),'.TIFF');
+  WriteFname = strcat(path,fname(1:end-4),'.TIFF');
   
   %%set TIFF specific HEADERS-- DISABLED for now.
   %tiffHandle = Tiff(WriteFname,'w');
