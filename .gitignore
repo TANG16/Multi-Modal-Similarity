@@ -1,3 +1,6 @@
+# Generated data files #
+###################
+*.dat
 # OS generated files #
 ######################
 .DS_Store
