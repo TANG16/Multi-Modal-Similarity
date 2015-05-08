@@ -24,9 +24,8 @@ noOfPatches = size(patches, 1);
 distanceMatrix = zeros(noOfPatches,noOfPatches);
 for i = 1:noOfPatches
     for j = 1:noOfPatches
-        X = patches(i,:);
         %distanceMatrix(i,j) = mean(normxcorr2(patches(i,:),patches(j,:))); % for NCC
-        distanceMatrix(i,j) = sum(sum((patches(i)-patches(j))^2)); % for SSD
+        distanceMatrix(i,j) = sum((patches(i,:)-patches(j,:)).^2); % for SSD
         distanceMatrix(j,i) = distanceMatrix(i,j);
     end
 end
