@@ -4,9 +4,10 @@
 % Steps to extract patches out of each modality image, represent them into Distance matrix, label them and compare with other modality.
 
 %% Step 1: Read the grayscale image.
+CreateTIFF();
 
 %% Step 2: Divide the image into number of patches using blockproc function in Matlab.
-path = strcat(pwd,'\Dataset\');
+path = strcat(pwd,'/Multi-Modal-Similarity/Dataset/');
 file = 'T2_03'; % Change the filename to pick corresponding .TIFF file and it will generate its distance matrix as .dat file
 ext = '.TIFF';
 fname = strcat(file, ext);
@@ -36,10 +37,11 @@ end
 [rows,cols] = size(distanceMatrix);
 totalRows = rows*(cols-1)/2; % Excluding the elements (j,i) for every (i,j) as it is a Symmetric Matrix.
 distMatFile = zeros(totalRows,3);
+maxValue = max(max(distanceMatrix));
 k=1;
 for i = 1:rows
    for j = i+1:cols
-       distMatFile(k,:) = [i,j,distanceMatrix(i,j)];
+       distMatFile(k,:) = [i,j,(distanceMatrix(i,j)/maxValue)];
        k = k+1;
    end
 end
