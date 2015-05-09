@@ -3,12 +3,12 @@ function [file, pathFile, patchSize] = initial_config()
 %   Keep this file local and not check in as it has machine specific configurations.
 
 path = strcat(pwd,'/Multi-Modal-Similarity/Dataset/');
-path = strcat(pwd,'\Dataset\');
+%path = strcat(pwd,'\Dataset\');
 file = 'T1_01'; % Change the filename to pick corresponding .TIFF file and it will generate its distance matrix as .dat file
 ext = '.TIFF';
 fname = strcat(file, ext);
 pathFile = strcat(path, fname);
-patchSize = 8;
+patchSize = 16;
 
 end
 

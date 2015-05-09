@@ -7,12 +7,13 @@
 CreateTIFF();
 
 %% Step 2: Divide the image into number of patches using blockproc function in Matlab.
-path = strcat(pwd,'/Multi-Modal-Similarity/Dataset/');
-file = 'T2_03'; % Change the filename to pick corresponding .TIFF file and it will generate its distance matrix as .dat file
-ext = '.TIFF';
-fname = strcat(file, ext);
-pathFile = strcat(path, fname);
-patches = ExtractBlocks(pathFile);
+%path = strcat(pwd,'/Multi-Modal-Similarity/Dataset/');
+
+% Call initial_config function to initialize file name, path & patch size.
+[file, pathFile, patchSize] = initial_config();
+
+% Changes to pass Patch Size dynamically as an input parameter.
+patches = ExtractBlocks(pathFile, patchSize);
 
 
 %% Step 3a: Compare patch by patch using SSD or NCC as distance measures.
@@ -26,6 +27,8 @@ for i = 1:noOfPatches
     for j = 1:noOfPatches
         %distanceMatrix(i,j) = mean(normxcorr2(patches(i,:),patches(j,:))); % for NCC
         distanceMatrix(i,j) = sum((patches(i,:)-patches(j,:)).^2); % for SSD
+        %distanceMatrix(i,j) = sqrt(sum((patches(i,:) - patches(j,:)).^2)./patchSize);
+        %distanceMatrix(i,j) = norm(patches(i,:) - patches(j,:));
         distanceMatrix(j,i) = distanceMatrix(i,j);
     end
 end
@@ -36,11 +39,17 @@ end
 [rows,cols] = size(distanceMatrix);
 totalRows = rows*(cols-1)/2; % Excluding the elements (j,i) for every (i,j) as it is a Symmetric Matrix.
 distMatFile = zeros(totalRows,3);
+
+% Computes the Euclidean distance between pairs of objects in m-by-n data matrix using pdist(distanceMatrix) Matlab function.
+% D is a row vector of length m(m–1)/2, corresponding to pairs of observations in distanceMatrix.
+% D = pdist(distanceMatrix);
+
 maxValue = max(max(distanceMatrix));
 k=1;
 for i = 1:rows
    for j = i+1:cols
        distMatFile(k,:) = [i,j,(distanceMatrix(i,j)/maxValue)];
+       %distMatFile(k,:) = [i,j,D(k)];
        k = k+1;
    end
 end
@@ -74,8 +83,6 @@ dlmwrite(datfile,distMatFile)
 
 %output = cluster_dp_func(distanceMatrix);
 cluster_dp;
-
-x=5;
 
 %% Step 5: Label the patches in the same modality using the cluster centroids.
 
