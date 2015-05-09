@@ -88,20 +88,34 @@ cluster_dp;
  
 patches = dlmread('patches.dat');
 cluster = dlmread('cluster_1.txt');
-%
-%this line is for testing, otherwise will generate too huge amount figures
-%
-cluster = cluster(1:10,:);
-new_cluster =[ unique(cluster(:,1)), unique(cluster(:,2))'];
-img_size = sqrt(size(patches(1,:),2));
-imgs = cell(2,1);
-for i = 1:(size(new_cluster,2))
+%todo find a better way to plot images in one single figure  
+cluster = cluster(1:50,:);
+new_cluster =unique([ unique(cluster(:,1))', unique(cluster(:,2))']);
+
+img_size = sqrt(size(patches,2));
+no_of_figure = size(new_cluster,2);
+imgs = cell(no_of_figure,1);
+
+%for i = 1:(size(new_cluster,2))
     
-    figure,image_show = imshow(mat2gray(reshape(patches(i,:),[img_size,img_size])));
+%    figure,image_show = imshow(mat2gray(reshape(patches(i,:),[img_size,img_size])));
     
-end
+%end
 %todo: do the same thing for other clustering files.
 
-   
+for i=1:no_of_figure
+    imgs{i} = mat2gray(reshape(patches(i,:),[img_size,img_size]));
+end
+figure(3)
+for i=1:no_of_figure
+    if(mod(no_of_figure,10)>0 )  
+        subplot(round(no_of_figure/10)+1,10,i);   
+    else
+        subplot(round(no_of_figure/10),10,i);
+    end
+    h = imshow(imgs{i}, 'InitialMag',100, 'Border','tight');
+    title(num2str(i))
+end
+
 %% Step 6: Repeat the above four steps for all Modality images.
 
