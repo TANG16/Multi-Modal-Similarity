@@ -172,7 +172,7 @@ for i=1:NCLUST
 end
 subplot(2,1,2)
 disp('Performing 2D nonclassical multidimensional scaling')
-Y1 = mdscale(dist, 2, 'criterion','metricstress');
+Y1 = cmdscale(dist);
 plot(Y1(:,1),Y1(:,2),'o','MarkerSize',2,'MarkerFaceColor','k','MarkerEdgeColor','k');
 title ('2D Nonclassical multidimensional scaling','FontSize',15.0)
 xlabel ('X')
