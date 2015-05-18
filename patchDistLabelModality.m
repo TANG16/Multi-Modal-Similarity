@@ -14,7 +14,7 @@ CreateTIFF();
 
 % Changes to pass Patch Size dynamically as an input parameter.
 patches = ExtractBlocks(pathFile, patchSize);
-
+dlmwrite('patches.dat',patches);
 
 %% Step 3a: Compare patch by patch using SSD or NCC as distance measures.
 % SSD - Make sure to use float, as raising integer to power of 2 will go out of range.
@@ -41,7 +41,7 @@ totalRows = rows*(cols-1)/2; % Excluding the elements (j,i) for every (i,j) as i
 distMatFile = zeros(totalRows,3);
 
 % Computes the Euclidean distance between pairs of objects in m-by-n data matrix using pdist(distanceMatrix) Matlab function.
-% D is a row vector of length m(m–1)/2, corresponding to pairs of observations in distanceMatrix.
+% D is a row vector of length m(m?1)/2, corresponding to pairs of observations in distanceMatrix.
 % D = pdist(distanceMatrix);
 
 maxValue = max(max(distanceMatrix));
@@ -85,7 +85,37 @@ dlmwrite(datfile,distMatFile)
 cluster_dp;
 
 %% Step 5: Label the patches in the same modality using the cluster centroids.
+ 
+patches = dlmread('patches.dat');
+cluster = dlmread('cluster_1.txt');
+%todo find a better way to plot images in one single figure  
+cluster = cluster(1:50,:);
+new_cluster =unique([ unique(cluster(:,1))', unique(cluster(:,2))']);
 
+img_size = sqrt(size(patches,2));
+no_of_figure = size(new_cluster,2);
+imgs = cell(no_of_figure,1);
+
+%for i = 1:(size(new_cluster,2))
+    
+%    figure,image_show = imshow(mat2gray(reshape(patches(i,:),[img_size,img_size])));
+    
+%end
+%todo: do the same thing for other clustering files.
+
+for i=1:no_of_figure
+    imgs{i} = mat2gray(reshape(patches(i,:),[img_size,img_size]));
+end
+figure(3)
+for i=1:no_of_figure
+    if(mod(no_of_figure,10)>0 )  
+        subplot(round(no_of_figure/10)+1,10,i);   
+    else
+        subplot(round(no_of_figure/10),10,i);
+    end
+    h = imshow(imgs{i}, 'InitialMag',100, 'Border','tight');
+    title(num2str(i))
+end
 
 %% Step 6: Repeat the above four steps for all Modality images.
 
