@@ -2,7 +2,7 @@ function [ output_args ] = ExtractBlocks( filename, patchSize )
 %EXTRACTBLOCKS extracts the blocks from the images and returns patches in a
 % matrix. whose each row corresponds to a patch.
 %USAGE: ExtractBlocks('T1_01.TIFF')
- 
+
   %%extract blocks and reshape them to flat out array
   %Changes to make patchSize dynamic by passing it as an input parameter.
   %extract = @(block_struct) reshape(block_struct.data,[1 100]);
@@ -15,7 +15,21 @@ function [ output_args ] = ExtractBlocks( filename, patchSize )
   
   %%blocproc concats into a matrix, so flat out the matrix
   pixels = numel(Blocks);
-  Blocks = reshape(Blocks,[1 pixels]);
+  % Blocks = reshape(Blocks,[1 pixels]);
+  
+  
+  %% Corrected Flattening logic as block reshape occurs column-wise.
+%   for i = 1:row
+%       X = [X ,Blocks(1,(i-1)*totalPointsInPatch+1 :i*totalPointsInPatch)];
+%   end 
+  
+  row = size(Blocks,1);
+  patches = [];
+  for i=1:row
+      for j=1:row
+          patches = [patches , Blocks(i,(j-1)*totalPointsInPatch+1 : j*totalPointsInPatch)];
+      end 
+  end
   
   %%extract and arrange the patch specific pixels in a row
 %   patches = zeros(pixels/100,100);
