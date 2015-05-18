@@ -182,17 +182,20 @@ for i=1:ND
  A(i,2)=0.;
 end
 for i=1:NCLUST
+  new_j = [];
   nn=0;
   ic=int8((i*64.)/(NCLUST*1.));
   for j=1:ND
     if (halo(j)==i)
       nn=nn+1;
+      new_j = [new_j j];
       A(nn,1)=Y1(j,1);
       A(nn,2)=Y1(j,2);
     end
   end
   hold on
-  plot(A(1:nn,1),A(1:nn,2),'o','MarkerSize',2,'MarkerFaceColor',cmap(ic,:),'MarkerEdgeColor',cmap(ic,:));
+  dlmwrite(sprintf('cluster_%d.txt',i),xx(new_j,:));
+  plot(A(1:nn,1),A(1:nn,2),'.','MarkerSize',2,'MarkerFaceColor',cmap(ic,:),'MarkerEdgeColor',cmap(ic,:));
 end
 
 %for i=1:ND
