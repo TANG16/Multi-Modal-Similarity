@@ -4,7 +4,7 @@ function [file, pathFile, patchSize] = initial_config()
 
 path = strcat(pwd,'/Multi-Modal-Similarity/Dataset/');
 %path = strcat(pwd,'\Dataset\');
-file = 'T1_01'; % Change the filename to pick corresponding .TIFF file and it will generate its distance matrix as .dat file
+file = 'T2_03'; % Change the filename to pick corresponding .TIFF file and it will generate its distance matrix as .dat file
 ext = '.TIFF';
 fname = strcat(file, ext);
 pathFile = strcat(path, fname);
