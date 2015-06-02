@@ -25,7 +25,10 @@ for i=1:N
   dist(ii,jj)=xx(i,3);
   dist(jj,ii)=xx(i,3);
 end
-percent=2.0;
+
+% Vary the percent values to alter the cut-off distance (dc).
+%percent=2.0;
+percent=5;
 fprintf('average percentage of neighbours (hard coded): %5.6f\n', percent);
 
 position=round(N*percent/100);
@@ -172,7 +175,10 @@ for i=1:NCLUST
 end
 subplot(2,1,2)
 disp('Performing 2D nonclassical multidimensional scaling')
-Y1 = cmdscale(dist);
+
+%Y1 = cmdscale(dist);
+Y1 = mdscale(dist, 2, 'criterion','metricsstress');
+
 plot(Y1(:,1),Y1(:,2),'o','MarkerSize',2,'MarkerFaceColor','k','MarkerEdgeColor','k');
 title ('2D Nonclassical multidimensional scaling','FontSize',15.0)
 xlabel ('X')
@@ -181,22 +187,26 @@ for i=1:ND
  A(i,1)=0.;
  A(i,2)=0.;
 end
+
+% Store the cluster numbers for the patches in a workspace variable.
+clusterPatch = [];
 for i=1:NCLUST
-  new_j = [];
   nn=0;
   ic=int8((i*64.)/(NCLUST*1.));
   for j=1:ND
     if (halo(j)==i)
       nn=nn+1;
-      new_j = [new_j j];
+      clusterPatch = [clusterPatch ;[j,i]];
       A(nn,1)=Y1(j,1);
       A(nn,2)=Y1(j,2);
     end
   end
   hold on
-  dlmwrite(sprintf('cluster_%d.txt',i),xx(new_j,:));
+  %dlmwrite(sprintf('cluster_%d.txt',i),xx(new_j,:));
   plot(A(1:nn,1),A(1:nn,2),'.','MarkerSize',2,'MarkerFaceColor',cmap(ic,:),'MarkerEdgeColor',cmap(ic,:));
 end
+
+save('clusteredPatches.mat','clusterPatch');
 
 %for i=1:ND
 %   if (halo(i)>0)
