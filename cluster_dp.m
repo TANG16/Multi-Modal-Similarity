@@ -13,7 +13,9 @@ NL=max(xx(:,1));
 if (NL>ND)
   ND=NL;
 end
+%no of elems
 N=size(xx,1);
+%diagonal zeros for similar elems
 for i=1:ND
   for j=1:ND
     dist(i,j)=0;
@@ -25,15 +27,24 @@ for i=1:N
   dist(ii,jj)=xx(i,3);
   dist(jj,ii)=xx(i,3);
 end
+<<<<<<< HEAD
 
 % Vary the percent values to alter the cut-off distance (dc).
 %percent=2.0;
 percent=5;
 fprintf('average percentage of neighbours (hard coded): %5.6f\n', percent);
+=======
+%percent=2.0;
+%fprintf('average percentage of neighbours (hard coded): %5.6f\n', percent);
+>>>>>>> 95ee4974cb9397582592b8a6b85a177e633710b5
 
-position=round(N*percent/100);
-sda=sort(xx(:,3));
-dc=sda(position);
+%position=round(N*percent/100);
+sda=sort(xx(:,3),'descend');
+max_dist = sda(1); 
+fprintf('maximum distance found in matrix: %12.6f\n', max_dist);
+dc=(max_dist*13/100) 
+%dc=(sda(position));
+%dc = 0.0490;
 
 fprintf('Computing Rho with gaussian kernel of radius: %12.6f\n', dc);
 
@@ -174,13 +185,18 @@ for i=1:NCLUST
    plot(rho(icl(i)),delta(icl(i)),'o','MarkerSize',8,'MarkerFaceColor',cmap(ic,:),'MarkerEdgeColor',cmap(ic,:));
 end
 subplot(2,1,2)
+<<<<<<< HEAD
 disp('Performing 2D nonclassical multidimensional scaling')
 
 %Y1 = cmdscale(dist);
 Y1 = mdscale(dist, 2, 'criterion','metricsstress');
 
+=======
+disp('Performing 2D Classical multidimensional scaling')
+Y1 = cmdscale(dist);
+>>>>>>> 95ee4974cb9397582592b8a6b85a177e633710b5
 plot(Y1(:,1),Y1(:,2),'o','MarkerSize',2,'MarkerFaceColor','k','MarkerEdgeColor','k');
-title ('2D Nonclassical multidimensional scaling','FontSize',15.0)
+title ('2D Classical multidimensional scaling','FontSize',15.0)
 xlabel ('X')
 ylabel ('Y')
 for i=1:ND

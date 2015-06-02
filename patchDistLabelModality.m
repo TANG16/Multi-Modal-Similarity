@@ -89,7 +89,7 @@ cluster_dp;
 patches = dlmread('patches.dat');
 cluster = dlmread('cluster_1.txt');
 %todo find a better way to plot images in one single figure  
-cluster = cluster(1:50,:);
+cluster = cluster(:,:);
 new_cluster =unique([ unique(cluster(:,1))', unique(cluster(:,2))']);
 
 img_size = sqrt(size(patches,2));
