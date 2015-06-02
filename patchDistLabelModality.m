@@ -29,6 +29,8 @@ for i = 1:noOfPatches
         distanceMatrix(i,j) = sum((patches(i,:)-patches(j,:)).^2); % for SSD
         %distanceMatrix(i,j) = sqrt(sum((patches(i,:) - patches(j,:)).^2)./patchSize);
         %distanceMatrix(i,j) = norm(patches(i,:) - patches(j,:));
+        %dotProduct = dot(patches(i,:),patches(j,:));
+        %distanceMatrix(i,j) = dotProduct/(norm(patches(i,:))*norm(patches(j,:)));
         distanceMatrix(j,i) = distanceMatrix(i,j);
     end
 end
@@ -85,37 +87,13 @@ dlmwrite(datfile,distMatFile)
 cluster_dp;
 
 %% Step 5: Label the patches in the same modality using the cluster centroids.
- 
-patches = dlmread('patches.dat');
-cluster = dlmread('cluster_1.txt');
-%todo find a better way to plot images in one single figure  
-cluster = cluster(:,:);
-new_cluster =unique([ unique(cluster(:,1))', unique(cluster(:,2))']);
 
-img_size = sqrt(size(patches,2));
-no_of_figure = size(new_cluster,2);
-imgs = cell(no_of_figure,1);
+% Map clusters to patches and display it.
+noOfPatches = size(patches,1);
+sortedClusterPatches = displayClusteredPatches(noOfPatches);
 
-%for i = 1:(size(new_cluster,2))
-    
-%    figure,image_show = imshow(mat2gray(reshape(patches(i,:),[img_size,img_size])));
-    
-%end
-%todo: do the same thing for other clustering files.
-
-for i=1:no_of_figure
-    imgs{i} = mat2gray(reshape(patches(i,:),[img_size,img_size]));
-end
-figure(3)
-for i=1:no_of_figure
-    if(mod(no_of_figure,10)>0 )  
-        subplot(round(no_of_figure/10)+1,10,i);   
-    else
-        subplot(round(no_of_figure/10),10,i);
-    end
-    h = imshow(imgs{i}, 'InitialMag',100, 'Border','tight');
-    title(num2str(i))
-end
+% Visualize the patches and clusters.
+visualizePatches(sortedClusterPatches);
 
 %% Step 6: Repeat the above four steps for all Modality images.
 

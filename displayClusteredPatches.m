@@ -1,4 +1,4 @@
-function displayClusteredPatches(noOfPatches)
+function sortedClusterPatches = displayClusteredPatches(noOfPatches)
 %% Map the patches to its clusters and display it.
 
 load('clusteredPatches.mat');
