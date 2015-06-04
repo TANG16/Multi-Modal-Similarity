@@ -20,13 +20,14 @@ dlmwrite('patches.dat',patches);
 % SSD - Make sure to use float, as raising integer to power of 2 will go out of range.
 % NCC - Use Normalized 2-D cross-correlation (normxcorr2) function in Matlab.
 
-matcol = 10;
 noOfPatches = size(patches, 1);
+save('noOfPatches.mat','noOfPatches');
 distanceMatrix = zeros(noOfPatches,noOfPatches);
 for i = 1:noOfPatches
     for j = 1:noOfPatches
         %distanceMatrix(i,j) = mean(normxcorr2(patches(i,:),patches(j,:))); % for NCC
-        distanceMatrix(i,j) = sum((patches(i,:)-patches(j,:)).^2); % for SSD
+        %distanceMatrix(i,j) = sum((patches(i,:)-patches(j,:)).^2); % for SSD
+        distanceMatrix(i,j) = sum((bsxfun(@minus, patches(i,:), patches(j,:)).^2));
         %distanceMatrix(i,j) = sqrt(sum((patches(i,:) - patches(j,:)).^2)./patchSize);
         %distanceMatrix(i,j) = norm(patches(i,:) - patches(j,:));
         %dotProduct = dot(patches(i,:),patches(j,:));
@@ -89,7 +90,7 @@ cluster_dp;
 %% Step 5: Label the patches in the same modality using the cluster centroids.
 
 % Map clusters to patches and display it.
-noOfPatches = size(patches,1);
+load('noOfPatches.mat');
 sortedClusterPatches = displayClusteredPatches(noOfPatches);
 
 % Visualize the patches and clusters.
