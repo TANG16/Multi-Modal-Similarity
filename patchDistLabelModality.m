@@ -21,7 +21,7 @@ dlmwrite('patches.dat',patches);
 % NCC - Use Normalized 2-D cross-correlation (normxcorr2) function in Matlab.
 
 noOfPatches = size(patches, 1);
-save('noOfPatches.mat','noOfPatches');
+%save('noOfPatches.mat','noOfPatches');
 distanceMatrix = zeros(noOfPatches,noOfPatches);
 for i = 1:noOfPatches
     for j = 1:noOfPatches
@@ -84,17 +84,32 @@ dlmwrite(datfile,distMatFile)
 % Above Step 4 is already implemented in paper in the file cluster_dp.m
 % Use it by wrapping a function around it.
 
-%output = cluster_dp_func(distanceMatrix);
-cluster_dp;
+%cluster_dp;
+noOfCutOffPerVal = 10;
+stepCutOffPerVal = 0.2;
+cutOffPercentage = ones(noOfCutOffPerVal,1);
+cutOffPercentage(:,1)=[stepCutOffPerVal:stepCutOffPerVal:noOfCutOffPerVal*stepCutOffPerVal];
+
+% lstClusterPatches = {};
+% for c=1:noOfCutOffPerVal
+%     clusterPatch = cluster_dp(cutOffPercentage(c));
+%     lstClusterPatches = [lstClusterPatches ; clusterPatch];
+% end
 
 %% Step 5: Label the patches in the same modality using the cluster centroids.
 
 % Map clusters to patches and display it.
-load('noOfPatches.mat');
-sortedClusterPatches = displayClusteredPatches(noOfPatches);
+%load('noOfPatches.mat');
+%sortedClusterPatches = displayClusteredPatches(noOfPatches);
 
 % Visualize the patches and clusters.
-visualizePatches(sortedClusterPatches);
+%visualizePatches(sortedClusterPatches);
+
+for c=1:noOfCutOffPerVal
+    clusterPatch = cluster_dp(distMatFile, cutOffPercentage(c));
+    sortedClusterPatches = displayClusteredPatches(clusterPatch, noOfPatches);
+    visualizePatches(patches, sortedClusterPatches);
+end
 
 %% Step 6: Repeat the above four steps for all Modality images.
 

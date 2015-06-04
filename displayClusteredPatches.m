@@ -1,10 +1,8 @@
-function sortedClusterPatches = displayClusteredPatches(noOfPatches)
+function sortedClusterPatches = displayClusteredPatches(clusterPatch, noOfPatches)
 %% Map the patches to its clusters and display it.
 
-load('clusteredPatches.mat');
+%load('clusteredPatches.mat');
 totalPatches = size(clusterPatch,1);
-%noOfPatches = size(patches, 1);
-%patchSize = sqrt(size(patches,2));
 patchSize = sqrt(noOfPatches);
 
 Image  = [];

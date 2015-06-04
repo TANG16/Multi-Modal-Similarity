@@ -1,13 +1,20 @@
-clear all
-close all
+function clusterPatch = cluster_dp(xx, percent)
+%% This package implement the clustering algorithm described by Alex Rodriguez and Alessandro Laio (2014). 
+%  Rodriguez, A., & Laio, A. (2014). Clustering by fast search and find of density peaks. Science, 344(6191), 1492-1496. doi:10.1126/science.1242072
+
+%clear all
+%close all
 disp('The only input needed is a distance matrix file')
 disp('The format of this file should be: ')
 disp('Column 1: id of element i')
 disp('Column 2: id of element j')
 disp('Column 3: dist(i,j)')
-mdist=input('name of the distance matrix file\n','s');
-disp('Reading input distance matrix')
-xx=load(mdist);
+
+% Passed the distance matrix file as an input parameter.
+% mdist=input('name of the distance matrix file\n','s');
+%disp('Reading input distance matrix')
+%xx=load(mdist);
+
 ND=max(xx(:,2));
 NL=max(xx(:,1));
 if (NL>ND)
@@ -29,20 +36,19 @@ for i=1:N
 end
 
 % Vary the percent values to alter the cut-off distance (dc).
-percent=2.0;
-%percent=5;
+% Use the input parameter to calculate the cut off distance using the percentage.
+% percent=2.0;
 fprintf('average percentage of neighbours (hard coded): %5.6f\n', percent);
 
-%position=round(N*percent/100);
+position=round(N*percent/100);
 sda=sort(xx(:,3),'descend');
+%sda=sort(xx(:,3));
 max_dist = sda(1); 
-fprintf('maximum distance found in matrix: %12.6f\n', max_dist);
+%fprintf('maximum distance found in matrix: %12.6f\n', max_dist);
 dc=(max_dist*13/100) 
 %dc=(sda(position));
-%dc = 0.0490;
 
 fprintf('Computing Rho with gaussian kernel of radius: %12.6f\n', dc);
-
 
 for i=1:ND
   rho(i)=0.;
@@ -96,18 +102,19 @@ end
 disp('Select a rectangle enclosing cluster centers')
 scrsz = get(0,'ScreenSize');
 figure('Position',[6 72 scrsz(3)/4. scrsz(4)/1.3]);
+
 for i=1:ND
   ind(i)=i;
   gamma(i)=rho(i)*delta(i);
 end
-subplot(2,1,1)
+subplot(2,1,1);
 tt=plot(rho(:),delta(:),'o','MarkerSize',5,'MarkerFaceColor','k','MarkerEdgeColor','k');
 title ('Decision Graph','FontSize',15.0)
 xlabel ('\rho')
 ylabel ('\delta')
 
 
-subplot(2,1,1)
+subplot(2,1,1);
 rect = getrect(1);
 rhomin=rect(1);
 deltamin=rect(2);
@@ -197,7 +204,7 @@ for i=1:ND
  A(i,2)=0.;
 end
 
-% Store the cluster numbers for the patches in a workspace variable.
+% Return the cluster numbers for the patches as an output parameter.
 clusterPatch = [];
 for i=1:NCLUST
   nn=0;
@@ -214,8 +221,7 @@ for i=1:NCLUST
   %dlmwrite(sprintf('cluster_%d.txt',i),xx(new_j,:));
   plot(A(1:nn,1),A(1:nn,2),'.','MarkerSize',2,'MarkerFaceColor',cmap(ic,:),'MarkerEdgeColor',cmap(ic,:));
 end
-
-save('clusteredPatches.mat','clusterPatch');
+%save('clusteredPatches.mat','clusterPatch');
 
 %for i=1:ND
 %   if (halo(i)>0)
@@ -231,4 +237,6 @@ disp('column 2:cluster assignation without halo control')
 disp('column 3:cluster assignation with halo control')
 for i=1:ND
    fprintf(faa, '%i %i %i\n',i,cl(i),halo(i));
+end
+
 end

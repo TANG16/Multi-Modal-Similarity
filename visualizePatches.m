@@ -1,20 +1,20 @@
-function visualizePatches(sortedClusterPatches)
+function visualizePatches(patches, sortedClusterPatches)
 
-patches = dlmread('patches.dat');
+%patches = dlmread('patches.dat');
 noOfClusters = size(unique(sortedClusterPatches(:,2)),1);
 
 img_size = sqrt(size(patches,2));
 
 new_cluster = [];
 for k = 1:noOfClusters
-    new_cluster = sortedClusterPatches(sortedClusterPatches(:,2) == k)
+    new_cluster = sortedClusterPatches(sortedClusterPatches(:,2) == k);
     no_of_figure = size(new_cluster,1);
     imgs = cell(no_of_figure,1);
     for i=1:no_of_figure
-        new_cluster(i)
+        new_cluster(i);
         imgs{i} = mat2gray(reshape(patches(new_cluster(i),:),[img_size,img_size]));
     end
-    figure(2+k)
+    figure(2+k);
     for i=1:no_of_figure
         if(mod(no_of_figure,10)>0 )  
             subplot(round(no_of_figure/10)+1,10,i);   
@@ -22,7 +22,7 @@ for k = 1:noOfClusters
             subplot(round(no_of_figure/10),10,i);
         end
         h = imshow(imgs{i}, 'InitialMag',100, 'Border','tight');
-        title(num2str(i))
+        title(num2str(i));
     end
 end
 end
