@@ -1,4 +1,4 @@
-function visualizePatches(patches, sortedClusterPatches)
+function visualizePatches(patches, sortedClusterPatches,percent)
 
 %patches = dlmread('patches.dat');
 noOfClusters = size(unique(sortedClusterPatches(:,2)),1);
@@ -24,5 +24,7 @@ for k = 1:noOfClusters
         h = imshow(imgs{i}, 'InitialMag',100, 'Border','tight');
         title(num2str(i));
     end
+    savefig(sprintf('tuningParameters/patchesVisualize_%f_cluser_%d.fig',percent,k));
 end
+
 end

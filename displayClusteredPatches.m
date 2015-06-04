@@ -1,4 +1,4 @@
-function sortedClusterPatches = displayClusteredPatches(clusterPatch, noOfPatches)
+function sortedClusterPatches = displayClusteredPatches(clusterPatch, noOfPatches,percent)
 %% Map the patches to its clusters and display it.
 
 %load('clusteredPatches.mat');
@@ -22,6 +22,6 @@ Image = reshape(Image,[patchSize*sqrt(totalPatches),patchSize*sqrt(totalPatches)
 %% Plot the points belonging to each cluster with different colours.
 figure;
 imagesc(Image);
-
+savefig(sprintf('tuningParameters/displayClusteredPatches_%f.fig',percent));
 end
 

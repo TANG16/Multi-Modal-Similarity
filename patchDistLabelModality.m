@@ -5,6 +5,7 @@
 
 %% Step 1: Read the grayscale image.
 CreateTIFF();
+fig_index = 3;
 
 %% Step 2: Divide the image into number of patches using blockproc function in Matlab.
 %path = strcat(pwd,'/Multi-Modal-Similarity/Dataset/');
@@ -107,8 +108,9 @@ cutOffPercentage(:,1)=[stepCutOffPerVal:stepCutOffPerVal:noOfCutOffPerVal*stepCu
 
 for c=1:noOfCutOffPerVal
     clusterPatch = cluster_dp(distMatFile, cutOffPercentage(c));
-    sortedClusterPatches = displayClusteredPatches(clusterPatch, noOfPatches);
-    visualizePatches(patches, sortedClusterPatches);
+    sortedClusterPatches = displayClusteredPatches(clusterPatch, noOfPatches, cutOffPercentage(c));
+    visualizePatches(patches, sortedClusterPatches, cutOffPercentage(c));
+    
 end
 
 %% Step 6: Repeat the above four steps for all Modality images.
